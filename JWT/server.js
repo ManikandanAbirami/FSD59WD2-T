@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const authRoutes = require("./routes/auth");
+const taskRoutes = require("./routes/task");
 
 // Load environemnt variables from .env files
 dotenv.config();
@@ -26,6 +27,7 @@ mongoose
 
 // use Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/tasks", taskRoutes);
 
 const PORT = process.env.PORT || 3000;
 console.log("process.env.PORT", process.env.PORT);
