@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const sendEmail = require("../utils/emailService");
 const dotenv = require("dotenv");
 
 // Load environemnt variables from .env files
@@ -19,6 +20,14 @@ exports.registerUser = async (req, res) => {
   const { username, password, role } = req.body;
   const user = new User({ username, password, role });
   await user.save();
+
+  // Send Registration successful email
+  const message = `<h1>Welcome, ${user.username}!</h1> <p>Your registration was successful.</p><br><p>Thank you for registering with us.</p>`;
+  await sendEmail({
+    email: user.username,
+    subject: "Registration Successful",
+    message,
+  });
   res.json({
     _id: user._id,
     username: user.username,
