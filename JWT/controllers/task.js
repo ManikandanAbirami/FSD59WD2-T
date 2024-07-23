@@ -45,6 +45,6 @@ exports.deleteTask = async (req, res) => {
     return res.status(401).json({ message: "Unauthorized" });
     throw new Error("Unauthorized");
   }
-  await task.remove();
+  await task.deleteOne();
   res.json({ message: "Task deleted" });
 };
