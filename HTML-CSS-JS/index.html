@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtual DOM Example</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      #app {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-top: 20px;
+      }
+      button {
+        margin-top: 10px;
+      }
+      .item {
+        margin: 5px 0;
+        padding: 5px;
+        background-color: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Virtual DOM Example</h1>
+    <button onclick="addItem()">Add Item</button>
+    <button onclick="removeItem()">Remove Item</button>
+    <div id="app"></div>
+
+    <script>
+      // Our simple virtual DOM implementation
+      let virtualDOM = [];
+
+      function render() {
+        const appElement = document.getElementById("app");
+        appElement.innerHTML = "";
+
+        virtualDOM.forEach((item, index) => {
+          const itemElement = document.createElement("div");
+          itemElement.className = "item";
+          itemElement.textContent = `Item ${index + 1}: ${item}`;
+          appElement.appendChild(itemElement);
+        });
+      }
+
+      function updateVirtualDOM(newVirtualDOM) {
+        virtualDOM = newVirtualDOM;
+        render();
+      }
+
+      function addItem() {
+        const newItem = `New item ${virtualDOM.length + 1}`;
+        const newVirtualDOM = [...virtualDOM, newItem];
+        updateVirtualDOM(newVirtualDOM);
+      }
+
+      function removeItem() {
+        if (virtualDOM.length > 0) {
+          const newVirtualDOM = virtualDOM.slice(0, -1);
+          updateVirtualDOM(newVirtualDOM);
+        }
+      }
+
+      // Initial render
+      render();
+    </script>
+  </body>
+</html>
