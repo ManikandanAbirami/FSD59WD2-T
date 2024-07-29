@@ -5,16 +5,20 @@ const jwt = require("jsonwebtoken");
 
 // Login Route
 router.post("/", async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  let user = await User.findOne({ email, password });
-  if (!user) return res.status(400).send("Invalid Credentials");
+    let user = await User.findOne({ email, password });
+    if (!user) return res.status(400).send("Invalid Credentials");
 
-  //Generate token
-  const jwtData = { _id: user._id, name: user.name };
-  const token = jwt.sign(jwtData, process.env.JWTSECRET, { expiresIn: "2h" });
-
-  res.send(token);
+    //Generate token
+    const jwtData = { _id: user._id, name: user.name };
+    const token = jwt.sign(jwtData, process.env.JWTSECRET, { expiresIn: "2h" });
+    res.send(token);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Server Error");
+  }
 });
 
 module.exports = router;

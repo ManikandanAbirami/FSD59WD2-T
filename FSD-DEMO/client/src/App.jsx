@@ -3,8 +3,8 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode';
 
 import './App.css'
-import Navbar from '../components/navbar/Navbar';
-import Routing from '../components/routing/Routing';
+import Navbar from '../src/components/navbar/Navbar';
+import Routing from '../src/components/routing/Routing';
 import setAuthToken from '../utils/setAuthToken';
 
 let logUser;
