@@ -17,7 +17,6 @@ function Post({ post }) {
 
     const handleComment = async () => {
         const comment = prompt('Enter your comment');
-        debugger
         if (comment) {
             try {
                 await http.post(`/post/comment/${post._id}`, { text: comment });
@@ -33,7 +32,7 @@ function Post({ post }) {
                 title={post.user.username}
                 subheader={new Date(post.date).toLocaleString()}
             />
-            <CardMedia component="img" image={"https://picsum.photos/200/300"} height="194" alt="Post image" />
+            <CardMedia component="img" image={post.image} height="194" alt="Post image" />
             <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
                     {post.content}

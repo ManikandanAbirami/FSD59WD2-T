@@ -3,10 +3,11 @@ const multer = require("multer");
 const Post = require("../models/Post");
 const auth = require("../middleware/auth");
 const router = express.Router();
+const path = require("path");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./public/images");
+    cb(null, path.join(__dirname, "../../client/public/images"));
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
@@ -23,7 +24,7 @@ router.post("/", auth, upload.single("image"), async (req, res) => {
     const newPost = new Post({
       user: req.user._id,
       content,
-      image: req.file ? req.file.path : "",
+      image: req.file ? `public/images/${req.file.filename}` : "",
     });
 
     const post = await newPost.save();
