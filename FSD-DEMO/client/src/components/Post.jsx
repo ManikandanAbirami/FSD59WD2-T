@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Card, CardHeader, CardContent, CardMedia, Typography, IconButton, Avatar } from '@mui/material';
 import { Favorite, Comment } from '@mui/icons-material';
-import { useAuth } from '../context/AuthContext';
+import AuthContext from '../context/AuthContext';
 import http from '../../utils/http';
 
 function Post({ post }) {
-    const { user } = useAuth();
+    const { user } = useContext(AuthContext);
 
     const handleLike = async () => {
         try {
@@ -17,9 +17,10 @@ function Post({ post }) {
 
     const handleComment = async () => {
         const comment = prompt('Enter your comment');
+        debugger
         if (comment) {
             try {
-                await http.put(`/post/comment/${post._id}`, { text: comment });
+                await http.post(`/post/comment/${post._id}`, { text: comment });
             } catch (err) {
                 console.log(err);
             }
@@ -32,7 +33,7 @@ function Post({ post }) {
                 title={post.user.username}
                 subheader={new Date(post.date).toLocaleString()}
             />
-            <CardMedia component="img" image={post.image} height="194" alt="Post image" />
+            <CardMedia component="img" image={"https://picsum.photos/200/300"} height="194" alt="Post image" />
             <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
                     {post.content}

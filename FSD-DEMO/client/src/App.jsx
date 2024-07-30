@@ -1,33 +1,28 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom'
-import { jwtDecode } from 'jwt-decode';
-
-import './App.css'
-import Navbar from '../src/components/navbar/Navbar';
-import Routing from '../src/components/routing/Routing';
-import setAuthToken from '../utils/setAuthToken';
-
-let logUser;
-if (localStorage.token) {
-  const jwt = localStorage.getItem('token');
-  setAuthToken(jwt);
-  logUser = jwtDecode(jwt);
-}
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Layout from './components/Layout';
+import Login from './components/login/Login';
+import Register from './components/register/Register';
+import Profile from './components/Profile';
+import Feed from './components/Feed';
+import PrivateRoute from '../src/components/routing/PrivateRoute';
 
 function App() {
-  const [user, setUser] = useState(logUser);
-
-  console.log(user);
-
   return (
-    <Router>
-      <div className='app'>
-        <Navbar user={user} />
-        <div className='main'>
-          <Routing user={user} />
-        </div>
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path='/login' element={<Login />}></Route>
+            <Route path='/register' element={<Register />}></Route>
+            <Route path='/profile' element={<PrivateRoute><Profile /> </PrivateRoute>}></Route>
+            <Route path='/feed' element={<PrivateRoute><Feed /> </PrivateRoute>}></Route>
+            <Route path='/' element={<Navigate to="/login"></Navigate>}></Route>
+          </Routes>
+        </Layout>
+      </Router>
+    </AuthProvider >
   )
 }
 

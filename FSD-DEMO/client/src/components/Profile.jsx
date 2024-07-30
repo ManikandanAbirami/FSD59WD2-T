@@ -1,9 +1,9 @@
-import React from 'react'
-import { useAuth } from '../context/AuthContext'
+import React, { useContext } from 'react'
+import AuthContext from '../context/AuthContext'
 import { Paper, Typography, Avatar, Button } from "@mui/material"
 
 function Profile() {
-    const { user, logout } = useAuth();
+    const { user, logout } = useContext(AuthContext);
     return (
         <Paper style={{ padding: "16px" }}>
             <Avatar src={user.profilePicture} style={{ width: 60, height: 60, marginBottom: "16px" }} />
