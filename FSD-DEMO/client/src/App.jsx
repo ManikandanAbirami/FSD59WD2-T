@@ -7,6 +7,7 @@ import Register from './components/register/Register';
 import Profile from './components/Profile';
 import Feed from './components/Feed';
 import PrivateRoute from '../src/components/routing/PrivateRoute';
+import NewPost from './components/NewPost';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path='/register' element={<Register />}></Route>
             <Route path='/profile' element={<PrivateRoute><Profile /> </PrivateRoute>}></Route>
             <Route path='/feed' element={<PrivateRoute><Feed /> </PrivateRoute>}></Route>
+            <Route path='/create-post' element={<PrivateRoute><NewPost /> </PrivateRoute>}></Route>
             <Route path='/' element={<Navigate to="/login"></Navigate>}></Route>
           </Routes>
         </Layout>

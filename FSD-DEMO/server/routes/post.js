@@ -40,6 +40,7 @@ router.get("/", auth, async (req, res) => {
   try {
     const posts = await Post.find()
       .populate("user", ["username", "profilePicture"])
+      .populate("comments.user", ["username"])
       .sort({ date: -1 });
     res.json(posts);
   } catch (error) {
@@ -53,11 +54,17 @@ router.put("/like/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    if (post.likes.includes(req.user._id)) {
-      return res.status(400).json({ msg: "Post already liked" });
+    if (!post) {
+      return res.status(404).json({ msg: "Post not found" });
     }
 
-    post.likes.push(req.user._id);
+    const userIndex = post.likes.indexOf(req.user.id);
+
+    if (userIndex >= 0) {
+      post.likes.splice(userIndex, 1); // Unlike the post
+    } else {
+      post.likes.push(req.user.id); // Like the post
+    }
     await post.save();
     res.json(post.likes);
   } catch (error) {
@@ -80,6 +87,41 @@ router.post("/comment/:id", auth, async (req, res) => {
 
     post.comments.push(newComment);
     await post.save();
+    res.json(post.comments);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server Error" });
+  }
+});
+
+// Delete a comment
+router.delete("/comment/:postId/:commentId", auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId);
+
+    if (!post) {
+      return res.status(404).json({ msg: "Post not found" });
+    }
+
+    //find the comment
+    const comment = post.comments.find(
+      (comment) => comment.id === req.params.commentId
+    );
+
+    // Make sure comment exists
+    if (!comment) {
+      return res.status(404).json({ msg: "Comment not found" });
+    }
+
+    // Get remove index
+    const removeIndex = post.comments
+      .map((comment) => comment.id)
+      .indexOf(req.params.commentId);
+
+    post.comments.splice(removeIndex, 1);
+
+    await post.save();
+
     res.json(post.comments);
   } catch (error) {
     console.log(error);
